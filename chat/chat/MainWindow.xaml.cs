@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace chat
 {
@@ -23,6 +24,29 @@ namespace chat
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void ButtonServer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        public void addTextToRichTextBox(string message)
+        {
+            getSendRichTextBox.Dispatcher.Invoke((Action)(() =>
+            {
+                getSendRichTextBox.AppendText(message);
+            }));
         }
     }
 }
