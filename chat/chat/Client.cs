@@ -13,14 +13,14 @@ namespace chat
     {
         public string message;
         TcpClient tcpClient = new TcpClient();
-        MainWindow mw = new MainWindow();
+        MainWindow mw;
 
         public void ClientObject(string ipaddress, int port)
         {
             try
             {
                 tcpClient.Connect(ipaddress, port);
-                Thread getMessageThread = new Thread(new ThreadStart(GetMessage));
+                Thread getMessageThread = new Thread(new ThreadStart(serverStart));
                 getMessageThread.Start();
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace chat
             }
         }
 
-        public void GetMessage()
+        public void serverStart()
         {
             try
             {

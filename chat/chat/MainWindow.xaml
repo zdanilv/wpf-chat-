@@ -10,7 +10,7 @@
         <RichTextBox x:Name="getSendRichTextBox" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" VerticalAlignment="Top" Width="281" RenderTransformOrigin="0.234,0.152">
             <FlowDocument>
                 <Paragraph>
-                    <Run Text="RichTextBox"/>
+                    <Run Text=""/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
@@ -21,8 +21,8 @@
         <Button x:Name="buttonConnect" Content="Connect" HorizontalAlignment="Left" Margin="371,67,0,0" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.467,0" Click="ButtonConnect_Click"/>
         <TextBlock HorizontalAlignment="Left" Margin="296,42,0,0" TextWrapping="Wrap" Text="Nickname:" VerticalAlignment="Top" Height="16" Width="55"/>
         <TextBox x:Name="textboxNick" HorizontalAlignment="Left" Height="23" Margin="356,39,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="75"/>
-        <TextBox HorizontalAlignment="Left" Height="57" Margin="10,215,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="421"/>
-        <Button Content="Send message" HorizontalAlignment="Left" Margin="296,189,0,0" VerticalAlignment="Top" Width="135" Click="Button_Click"/>
+        <TextBox x:Name="textboxSend" HorizontalAlignment="Left" Height="57" Margin="10,215,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="421"/>
+        <Button Content="Send message" HorizontalAlignment="Left" Margin="296,189,0,0" VerticalAlignment="Top" Width="135" Click="ButtonSend_Click"/>
         <Label Content="zdanilv" HorizontalAlignment="Left" Margin="306,110,0,0" VerticalAlignment="Top" FontSize="36" Foreground="LightGray"/>
 
     </Grid>

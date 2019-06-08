@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Net;
 
 namespace chat
 {
@@ -21,6 +22,10 @@ namespace chat
     /// </summary>
     public partial class MainWindow : Window
     {
+        int serverOrClient = 0;
+        Server server = new Server();
+        Client client = new Client();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,17 +33,28 @@ namespace chat
 
         private void ButtonServer_Click(object sender, RoutedEventArgs e)
         {
-
+            serverOrClient = 1;
+            buttonConnect.IsEnabled = false;
+            server.ServerObject(textboxIp.Text, Convert.ToInt32(textboxPort.Text));
         }
 
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
-
+            serverOrClient = 2;
+            buttonServer.IsEnabled = false;
+            client.ClientObject(textboxIp.Text, Convert.ToInt32(textboxPort.Text));
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
-
+            if (serverOrClient == 1)
+            {
+                server.SendMessage(textboxNick.Text + ": " + textboxSend.Text);
+            }
+            if (serverOrClient == 2)
+            {
+                client.SendMessage(textboxNick.Text + ": " + textboxSend.Text);
+            }
         }
 
         public void addTextToRichTextBox(string message)
