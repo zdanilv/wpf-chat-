@@ -11,21 +11,22 @@ namespace chat
 {
     class Client
     {
-        public string message;
-        TcpClient tcpClient = new TcpClient();
-        MainWindow mw;
+        public static Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        static MainWindow mw = new MainWindow();
 
         public void ClientObject(string ipaddress, int port)
         {
             try
             {
-                tcpClient.Connect(ipaddress, port);
+                socket.Connect(ipaddress, port);
+                mw.addMessageTextBox("Подключение прошло успешно.");
                 Thread getMessageThread = new Thread(new ThreadStart(serverStart));
                 getMessageThread.Start();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error", ex.Message);
+                socket.Close();
             }
         }
 
@@ -33,15 +34,13 @@ namespace chat
         {
             try
             {
-                NetworkStream stream = tcpClient.GetStream();
-                byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-                stream.Dispose();
-                stream.Close();
+                byte[] buffer = System.Text.Encoding.Unicode.GetBytes(message);
+                socket.Send(buffer);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error", ex.Message);
+                socket.Close();
             }
         }
 
@@ -49,19 +48,19 @@ namespace chat
         {
             try
             {
-                byte[] data = new byte[256];
-                NetworkStream stream = tcpClient.GetStream();
-                do
+                byte[] buffer = new byte[1024];
+                while (true)
                 {
-                    int bytes = stream.Read(data, 0, data.Length); // получаем количество считанных байтов
-                    string message = Encoding.UTF8.GetString(data, 0, bytes);
-                    mw.addTextToRichTextBox(message);
+                    socket.Receive(buffer);
+                    string message = Encoding.Unicode.GetString(buffer);
+                    mw.addMessageTextBox(message);
+                    Array.Clear(buffer, 0, 1024);
                 }
-                while (stream.DataAvailable);
             }
             catch(Exception ex)
             {
                 MessageBox.Show("Error", ex.Message);
+                socket.Close();
             }
         }
     }

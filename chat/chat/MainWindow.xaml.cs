@@ -22,7 +22,7 @@ namespace chat
     /// </summary>
     public partial class MainWindow : Window
     {
-        int serverOrClient = 0;
+        static int serverOrClient = 0;
         Server server = new Server();
         Client client = new Client();
 
@@ -57,11 +57,11 @@ namespace chat
             }
         }
 
-        public void addTextToRichTextBox(string message)
+        public void addMessageTextBox(string message)
         {
-            getSendRichTextBox.Dispatcher.Invoke((Action)(() =>
+            getMessageTextBox.Dispatcher.Invoke((Action)(() =>
             {
-                getSendRichTextBox.AppendText(message);
+                getMessageTextBox.AppendText(message);
             }));
         }
     }
