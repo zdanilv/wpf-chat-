@@ -25,7 +25,6 @@ namespace WinChat
         public Form1()
         {
             InitializeComponent();
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -57,7 +56,7 @@ namespace WinChat
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (textBoxSend.Text != "")
+            if (textBoxSend.Text == "")
                 MessageBox.Show("Введите текст!");
             else
             {
@@ -78,6 +77,7 @@ namespace WinChat
 
                     TcpClient tcpClientServer = tcpListener.AcceptTcpClient();
                     networkStream = tcpClientServer.GetStream();
+                    this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Соединение установлено!"; }));
                 }
 
                 byte[] buffer = new byte[1024];
@@ -96,6 +96,7 @@ namespace WinChat
                     {
                         this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Клиент отключился!"; }));
                         Disconnect();
+                        break;
                     }
                 }
             }
@@ -111,6 +112,8 @@ namespace WinChat
             {
                 tcpClient = new TcpClient();
                 tcpClient.Connect(ip, port);
+                this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Соединение установлено!"; }));
+
                 networkStream = tcpClient.GetStream();
                 client = new Thread(serverObject);
                 client.Start();
@@ -140,17 +143,28 @@ namespace WinChat
 
         public void Disconnect()
         {
-            networkStream.Dispose();
-            networkStream.Close();
+            try
+            {
+                this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключение..."; }));
 
-            if (tcpListener != null)
-                tcpListener.Stop();
-            if (tcpClient != null)
-                tcpClient.Close();
-            if (server != null)
-                server.Abort();
-            if (client != null)
-                client.Abort();
+                networkStream.Dispose();
+                networkStream.Close();
+
+                if (tcpListener != null)
+                    tcpListener.Stop();
+                if (tcpClient != null)
+                    tcpClient.Close();
+
+                this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключено."; }));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            // if (server != null)
+            //     server.Abort();
+            // if (client != null)
+            //     client.Abort();
         }
     }
 }
