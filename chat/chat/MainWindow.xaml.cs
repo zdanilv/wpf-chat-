@@ -29,6 +29,8 @@ namespace chat
         public MainWindow()
         {
             InitializeComponent();
+
+            addMessageTextBox("Привет");
         }
 
         private void ButtonServer_Click(object sender, RoutedEventArgs e)
@@ -59,10 +61,22 @@ namespace chat
 
         public void addMessageTextBox(string message)
         {
-            getMessageTextBox.Dispatcher.Invoke((Action)(() =>
+            getMessageTextBox.Dispatcher.BeginInvoke(new Action(delegate()
             {
                 getMessageTextBox.AppendText(message);
             }));
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            server.socket.Dispose();
+            server.socket.Close();
+            server.clientSocket.Dispose();
+            server.clientSocket.Close();
+            client.socket.Dispose();
+            client.socket.Close();
+
+            Environment.Exit(0);
         }
     }
 }

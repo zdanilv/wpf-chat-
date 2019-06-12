@@ -12,19 +12,24 @@ namespace chat
 {
     class Server
     {
-        public static Socket clientSocket;
-        public static Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public Socket clientSocket;
+        public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         static MainWindow mw = new MainWindow();
 
         public void ServerObject(string ip, int port)
         {
+            mw.addMessageTextBox.Dispatcher.BeginInvoke(new Action(delegate ()
+            {
+                mw.addMessageTextBox.AppendText("Ожидаем подключение...");
+            }));
+
             try
             {
                 socket.Bind(new IPEndPoint(IPAddress.Any, port));
-                mw.getMessageTextBox.Dispatcher.Invoke(() =>
+                mw.getMessageTextBox.Dispatcher.BeginInvoke(new Action(delegate ()
                 {
-                    mw.getMessageTextBox.AppendText("Ожидаем подключения...");
-                });
+                    mw.getMessageTextBox.AppendText("Ожидаем подключение...");
+                }));
                 socket.Listen(1);
 
                 clientSocket = socket.Accept();
@@ -42,17 +47,22 @@ namespace chat
         public void serverStart()
         {
             byte[] buffer = new byte[1024];
-            mw.getMessageTextBox.Dispatcher.Invoke(() =>
+            mw.getMessageTextBox.Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 mw.getMessageTextBox.AppendText("Клиент подключен.");
-            });
-           
+            }));
+
+
 
             while (true)
             {
                 clientSocket.Receive(buffer);
                 string message = Encoding.Unicode.GetString(buffer);
-                mw.getMessageTextBox.AppendText(message);
+
+                mw.getMessageTextBox.Dispatcher.BeginInvoke(new Action(delegate ()
+                {
+                    mw.getMessageTextBox.AppendText(message);
+                }));
                 Array.Clear(buffer, 0, 1024);
             }
         }
@@ -63,6 +73,11 @@ namespace chat
             {
                 byte[] buffer = System.Text.Encoding.Unicode.GetBytes(message);
                 clientSocket.Send(buffer);
+
+                mw.getMessageTextBox.Dispatcher.BeginInvoke(new Action(delegate ()
+                {
+                    mw.getMessageTextBox.AppendText(message);
+                }));
             }
             catch (Exception ex)
             {

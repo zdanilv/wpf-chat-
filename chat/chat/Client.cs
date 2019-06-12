@@ -11,7 +11,7 @@ namespace chat
 {
     class Client
     {
-        public static Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         static MainWindow mw = new MainWindow();
 
         public void ClientObject(string ipaddress, int port)
@@ -36,6 +36,7 @@ namespace chat
             {
                 byte[] buffer = System.Text.Encoding.Unicode.GetBytes(message);
                 socket.Send(buffer);
+                mw.addMessageTextBox(message);
             }
             catch (Exception ex)
             {

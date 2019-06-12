@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:chat"
         mc:Ignorable="d"
-        Title="MainWindow" Height="310" Width="450">
+        Title="MainWindow" Height="310" Width="450"
+        Closed="Window_Closed">
     <Grid>
         <TextBox x:Name="textboxIp" HorizontalAlignment="Left" Height="23" Margin="296,10,0,0" TextWrapping="Wrap"  Text="127.0.0.1" VerticalAlignment="Top" Width="84" TextAlignment="Center"/>
         <TextBox x:Name="textboxPort" HorizontalAlignment="Left" Height="23" Margin="385,10,0,0" TextWrapping="Wrap" Text="8888" VerticalAlignment="Top" Width="46" TextAlignment="Center"/>
@@ -17,7 +18,7 @@
         <TextBox x:Name="textboxSend" HorizontalAlignment="Left" Height="57" Margin="10,215,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="421"/>
         <Button Content="Send message" HorizontalAlignment="Left" Margin="296,189,0,0" VerticalAlignment="Top" Width="135" Click="ButtonSend_Click"/>
         <Label Content="zdanilv" HorizontalAlignment="Left" Margin="306,110,0,0" VerticalAlignment="Top" FontSize="36" Foreground="LightGray"/>
-        <TextBox x:Name="getMessageTextBox" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="281"/>
+        <TextBox x:Name="getMessageTextBox" HorizontalAlignment="Left" Height="200" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="281" />
 
     </Grid>
 </Window>
