@@ -145,9 +145,11 @@
             this.Controls.Add(this.textBoxSend);
             this.Controls.Add(this.richTextBox);
             this.Controls.Add(this.button1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            //this.Closing += new System.ComponentModel.CancelEventHandler(this.Form1_FormClosing, CancelEventArgs e);
             this.ResumeLayout(false);
             this.PerformLayout();
 

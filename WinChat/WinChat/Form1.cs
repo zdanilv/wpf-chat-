@@ -10,26 +10,42 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using Open.Nat;
 
 namespace WinChat
 {
     public partial class Form1 : Form
     {
+
         Thread server = null;
         Thread client = null;
         TcpClient tcpClient = null;
         TcpListener tcpListener = null;
         NetworkStream networkStream = null;
-        static int serverOrClient = 0;
+        int serverOrClient = 0, port;
+        string nick, ipaddress;
 
         public Form1()
         {
             InitializeComponent();
+            FormClosing += Form1_FormClosing;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public async void OpenPort()
         {
+            var discoverer = new NatDiscoverer();
+            var cts = new CancellationTokenSource(10000);
+            var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
 
+            await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, port, port, "WinChat"));
+        }
+
+        public void EnableCont()
+        {
+            button4.Enabled = true;
+            button3.Enabled = true;
+            button2.Enabled = true;
+            button1.Enabled = true;
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -41,15 +57,31 @@ namespace WinChat
         {
             serverOrClient = 2;
             button2.Enabled = false;
-            textBoxNick.Enabled = false;
-            clientObject(textBoxIp.Text, Convert.ToInt32(textBoxPort.Text));
+            button3.Enabled = false;
+           //textBoxNick.Enabled = false;
+            //textBoxIp.Enabled = false;
+           // textBoxPort.Enabled = false;
+
+            nick = textBoxNick.Text;
+            port = Convert.ToInt32(textBoxPort.Text);
+            ipaddress = textBoxIp.Text;
+
+            clientObject(ipaddress, port);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             serverOrClient = 1;
             button3.Enabled = false;
-            textBoxNick.Enabled = false;
+            button2.Enabled = false;
+            //textBoxNick.Enabled = false;
+            //textBoxIp.Enabled = false;
+            //textBoxPort.Enabled = false;
+
+            nick = textBoxNick.Text;
+            port = Convert.ToInt32(textBoxPort.Text);
+            ipaddress = textBoxIp.Text;
+
             server = new Thread(serverObject);
             server.Start();
         }
@@ -69,10 +101,12 @@ namespace WinChat
         {
             try
             {
+                OpenPort();
+
                 if (serverOrClient == 1)
                 {
-                    IPAddress localAddr = IPAddress.Parse(textBoxIp.Text);
-                    tcpListener = new TcpListener(localAddr, Convert.ToInt32(textBoxPort.Text));
+                    IPAddress localAddr = IPAddress.Parse(ipaddress);
+                    tcpListener = new TcpListener(localAddr, port);
                     tcpListener.Start();
 
                     TcpClient tcpClientServer = tcpListener.AcceptTcpClient();
@@ -111,6 +145,7 @@ namespace WinChat
             try
             {
                 tcpClient = new TcpClient();
+                this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "подключение к " + ipaddress + ":" + port; }));
                 tcpClient.Connect(ip, port);
                 this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Соединение установлено!"; }));
 
@@ -145,6 +180,7 @@ namespace WinChat
         {
             try
             {
+                EnableCont();
                 this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключение..."; }));
 
                 networkStream.Dispose();
@@ -161,10 +197,12 @@ namespace WinChat
             {
                 MessageBox.Show(ex.Message);
             }
-            // if (server != null)
-            //     server.Abort();
-            // if (client != null)
-            //     client.Abort();
+        }
+
+        private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Disconnect();
+            Environment.Exit(0);
         }
     }
 }
