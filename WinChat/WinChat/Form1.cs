@@ -160,69 +160,69 @@ namespace WinChat
             }
         }
 
-        public void clientObject(string ip, int port)
+        public void clientObject(string ip, int port) // Метод подключения клиента к серверу
         {
             tcpClient = new TcpClient();                                                                                            // Инициализируем клиента
 
             this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text + Environment.NewLine
-                + DateTime.Now.ToString("HH:mm:ss") + " " + "подключение к " + ipaddress + ":" + port; }));
+                + DateTime.Now.ToString("HH:mm:ss") + " " + "подключение к " + ipaddress + ":" + port; }));                         // Выводим сообщение
 
-            tcpClient.Connect(ip, port);
+            tcpClient.Connect(ip, port);                                                                                            // Подключаемся к серверу
 
             this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text
-                + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Соединение установлено!"; }));
+                + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Соединение установлено!"; }));                   // Выводим сообщение
 
-            networkStream = tcpClient.GetStream();
+            networkStream = tcpClient.GetStream();                                                                                  // Чтобы взаимодействовать с клиентом/сервером TcpClient определяет метод GetStream(), который возвращает объект NetworkStream. Через данный объект можно передавать сообщения серверу или, наоборот, получать данные с сервера
 
-            client = new Thread(serverObject);
-            client.Start();
+            client = new Thread(serverObject);                                                                                      // Инициализируем поток client связываем его с serverObject для получения данных 
+            client.Start();                                                                                                         // Запускаем поток
         }
 
-        public void sendMessage(string message)
+        public void sendMessage(string message) // Метод отправки сообщений
         {
-            message = textBoxNick.Text + ": " + message;
-            richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + message;
+            message = textBoxNick.Text + ": " + message;                                                                            // Добавляем к сообщению никнейм
+            richTextBox.Text = richTextBox.Text + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + message;          // Выводим сообщение в richTextBox
 
-            byte[] buffer = Encoding.Unicode.GetBytes(message);
-            networkStream.Write(buffer, 0, buffer.Length);
+            byte[] buffer = Encoding.Unicode.GetBytes(message);                                                                     // Преобразуем строку сообщения в массив байтов
+            networkStream.Write(buffer, 0, buffer.Length);                                                                          // Записываем массив байтов в поток данных
 
-            Array.Clear(buffer, 0, buffer.Length);
-            message = "";
+            Array.Clear(buffer, 0, buffer.Length);                                                                                  // Очищаем массив байтов
+            message = "";                                                                                                           // Очищаем строку
         }
 
         public void Disconnect()
         {
-            EnableCont();
+            EnableCont();                                                                                                           // Включаем кнопки
 
-            if(networkStream != null)
+            if (networkStream != null)                                                                                              // Проверяем инициализирован ли поток данных
             {
                 this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text
-                    + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключение..."; }));
+                    + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключение..."; }));                                // Выводим сообщение
 
-                networkStream.Dispose();
-                networkStream.Close();
+                networkStream.Dispose();                                                                                                   // Освобождаем ресурсы занятые потоком данных
+                networkStream.Close();                                                                                                     // Закрываем поток данных
             }
 
-            if (tcpListener != null)
+            if (tcpListener != null)                                                                                                // Проверяем инициализирован ли TcpListener (Server)
             {
-                tcpListener.Stop();
+                tcpListener.Stop();                                                                                                        // Закрываем TcpListener (Server)
             }
                 
-            if (tcpClient != null)
+            if (tcpClient != null)                                                                                                  // Проверяем инициализирован ли TcpClient (Client)
             {
-                tcpClient.Close();
+                tcpClient.Close();                                                                                                         // Закрываем TcpClient (Client)
                 this.Invoke(new Action(() => { richTextBox.Text = richTextBox.Text
-                    + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключено."; }));
+                    + Environment.NewLine + DateTime.Now.ToString("HH:mm:ss") + " " + "Отключено."; }));                                   // Выводим сообщение
             }
                 
-            tcpListener = null;
-            tcpClient = null;
+            tcpListener = null;                                                                                                     // Приравниваем TcpListener (Server) к null (Чтобы можно было повторно создать подключение)
+            tcpClient = null;                                                                                                       // Приравниваем TcpClient (Client) к null (Чтобы можно было повторно создать подключение)
         }
 
-        private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Form1_FormClosing(object sender, System.ComponentModel.CancelEventArgs e) // Событие закрытия окна
         {
             Disconnect();
-            Environment.Exit(0);
+            Environment.Exit(0);                                                                                                    // Выход из программы
         }
     }
 }
