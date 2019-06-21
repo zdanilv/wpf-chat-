@@ -50,12 +50,12 @@ namespace WinChat
             this.Invoke(new Action(() => { buttonSendMessage.Enabled = true; }));
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonDisconnect_Click(object sender, EventArgs e)
         {
             Disconnect();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonConnect_Click(object sender, EventArgs e)
         {
             serverOrClient = 2;
             buttonDisconnect.Enabled = true;
@@ -69,7 +69,7 @@ namespace WinChat
             clientObject(ipaddress, port);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonServer_Click(object sender, EventArgs e)
         {
             serverOrClient = 1;
             buttonDisconnect.Enabled = true;
@@ -84,7 +84,7 @@ namespace WinChat
             server.Start();                                                                                                         // Запускаем поток server
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonSendMessage_Click(object sender, EventArgs e)
         {
             if (textBoxSend.Text == "")                                                                                             // Если textBoxSend пуст, то выдает сообщение 
             {

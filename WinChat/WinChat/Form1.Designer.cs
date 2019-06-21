@@ -48,7 +48,7 @@
             this.buttonSendMessage.TabIndex = 0;
             this.buttonSendMessage.Text = "Send message";
             this.buttonSendMessage.UseVisualStyleBackColor = true;
-            this.buttonSendMessage.Click += new System.EventHandler(this.button1_Click);
+            this.buttonSendMessage.Click += new System.EventHandler(this.buttonSendMessage_Click);
             // 
             // richTextBox
             // 
@@ -75,7 +75,7 @@
             this.buttonServer.TabIndex = 3;
             this.buttonServer.Text = "Server";
             this.buttonServer.UseVisualStyleBackColor = true;
-            this.buttonServer.Click += new System.EventHandler(this.button2_Click);
+            this.buttonServer.Click += new System.EventHandler(this.buttonServer_Click);
             // 
             // buttonConnect
             // 
@@ -85,7 +85,7 @@
             this.buttonConnect.TabIndex = 4;
             this.buttonConnect.Text = "Connect";
             this.buttonConnect.UseVisualStyleBackColor = true;
-            this.buttonConnect.Click += new System.EventHandler(this.button3_Click);
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
             // textBoxIp
             // 
@@ -128,7 +128,7 @@
             this.buttonDisconnect.TabIndex = 9;
             this.buttonDisconnect.Text = "Disconnect";
             this.buttonDisconnect.UseVisualStyleBackColor = true;
-            this.buttonDisconnect.Click += new System.EventHandler(this.button4_Click);
+            this.buttonDisconnect.Click += new System.EventHandler(this.buttonDisconnect_Click);
             // 
             // Form1
             // 
